@@ -1,0 +1,129 @@
+Task-24: Add Response Headers in Apache
+========================================
+
+There is only one success - to be able to spend your life in your own way.
+
+– Christopher Morley
+
+
+Task:
+-----
+We are working on hardening Apache web server on all app servers. As a part of this process we want to add some of the Apache response headers for security purpose. We are testing the settings one by one on all app servers. As per details mentioned below enable these headers for Apache:
+
+    Install httpd package on App Server 2 using yum and configure it to run on 5000 port, make sure to start its service.
+
+    Create an index.html file under Apache's default document root i.e /var/www/html and add below given content in it.
+
+    Welcome to the xFusionCorp Industries!
+
+    Configure Apache to enable below mentioned headers:
+
+    X-XSS-Protection header with value 1; mode=block
+
+    X-Frame-Options header with value SAMEORIGIN
+
+    X-Content-Type-Options header with value nosniff
+
+Note: You can test using curl on the given app server as LBR URL will not work for this task.
+
+
+--------------
+Resolution:
+--------------
+
+1-)
+
+To install the httpd package on App Server 2 using yum and configure it to run on port 5000, you can follow these steps:
+
+Open a terminal and log in to App Server 2 as a user with sudo privileges.
+
+Install the httpd package using yum by running the following command:
+
+
+sudo yum install httpd
+
+Once the installation is complete, you can configure the Apache server to run on port 5000. To do this, open the Apache configuration file in a text editor:
+
+
+- sudo vi /etc/httpd/conf/httpd.conf
+
+Find the following line in the file:
+
+
+- Listen 80
+
+Replace it with:
+
+
+- Listen 5000
+
+Save and close the file.
+
+Next, create a file named index.html in Apache's default document root directory:
+
+
+- sudo vi /var/www/html/index.html
+
+Add the following content to the file:
+
+
+- Welcome to the xFusionCorp Industries!
+
+Save and close the file.
+
+Start the Apache service by running the following command:
+
+
+- sudo systemctl start httpd
+
+The Apache service should now be running on port 5000, and you should be able to access the default webpage by navigating to http://<server-ip>:5000 in a web browser.
+
+2-)
+
+To configure Apache to enable the specified headers, you can follow these steps:
+
+Open the Apache configuration file in a text editor:
+
+
+- sudo vi /etc/httpd/conf/httpd.conf
+
+Find the following line in the file:
+
+
+<Directory "/var/www/html">
+
+Below this line, add the following lines to enable the X-XSS-Protection header:
+
+
+- Header set X-XSS-Protection "1; mode=block"
+
+Add the following line to enable the X-Frame-Options header:
+
+
+- Header always append X-Frame-Options SAMEORIGIN
+
+Add the following line to enable the X-Content-Type-Options header:
+
+
+- Header set X-Content-Type-Options nosniff
+
+Save and close the file.
+
+Restart the Apache service for the changes to take effect:
+
+
+- sudo systemctl restart httpd
+
+After completing these steps, the specified headers should be enabled in Apache. You can test this by sending a request to the server and inspecting the response headers using a tool like curl or a web browser's developer console.
+
+You can test whether the headers are being sent by Apache using the curl command on the App Server 2. Here's an example command to test the X-XSS-Protection header:
+
+
+- curl -I http://localhost:5000/
+
+This command will send a request to the Apache server running on App Server 2 and display the response headers. You should see a header like this in the response:
+
+
+X-XSS-Protection: 1; mode=block
+
+Similarly, you can test the other headers by sending requests to the server and inspecting the response headers with the curl command.

@@ -1,0 +1,13 @@
+Store Terraform state-file in AWS
+-------------------------------------
+
+link: https://youtu.be/5FkcC_w3xQM
+-----
+
+Problem statement: 
+------------------
+ Terraform statefile is in your local system, another DevOps want to use it.
+   - What should you do to make that statefile available for others?
+   - How ?
+
+Please can someone wants to demo this to us for tomorrow or wednesday?

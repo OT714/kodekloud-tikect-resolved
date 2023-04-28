@@ -1,0 +1,140 @@
+Task-12 Linux Services
+======================
+To master a new technology, you will have to play with it.
+
+– Jordan Peterson
+
+I am experienced enough to do this. I am knowledgeable enough to do this. I am prepared enough to do this. I am mature enough to do this. I am brave enough to do this.
+
+– Alexandria Ocasio-Cortez
+
+=======================================================================================================
+
+Task:
+-----
+
+As per details shared by the development team, the new application release has some dependencies on the back end. There are some packages/services that need to be installed on all app servers under Stratos Datacenter. As per requirements please perform the following steps:
+
+a. Install squid package on all the application servers.
+
+b. Once installed, make sure it is enabled to start during boot.
+
+
+
+
+Solution:
+----------
+ To install Squid and enable it to start during boot on a Ubuntu/Debian system:
+
+sudo apt update
+sudo apt install -y squid
+sudo systemctl enable squid
+sudo systemctl start squid
+
+The first command updates the package cache, the second command installs the squid package, and the third and fourth commands enable and start the Squid service respectively.
+
+On a CentOS/RHEL system, the commands would be slightly different:
+
+
+sudo yum update
+sudo yum install -y squid
+sudo systemctl enable squid
+sudo systemctl start squid
+
+The first command updates the package cache, the second command installs the squid package, and the third and fourth commands enable and start the Squid service respectively.
+
+Note that you need to run these commands with root or sudo privileges. Also, make sure to verify the correct service name if you are running a different version of the operating system or if you have made any custom configurations.
+
+
+Ansible-Playbook:
+-----------------
+
+- name: Install Squid on all application servers
+  hosts: all_app_servers
+  become: true
+  tasks:
+    - name: Install Squid package
+      package:
+        name: squid
+        state: present
+      notify:
+        - enable squid service
+
+  handlers:
+    - name: enable squid service
+      service:
+        name: squid
+        enabled: true
+        state: started
+=================================================================================================
+
+To check if the Squid service is enabled on a system, you can use the following command:
+
+
+systemctl is-enabled squid
+
+This command will output enabled if the Squid service is enabled to start during boot, or disabled if it is not. If the Squid service is not installed on the system, the command will output disabled as well.
+
+If you have multiple servers and want to check the status of the Squid service on all of them, you can use Ansible to execute the command remotely:
+
+
+ansible all_app_servers -m systemd -a "name=squid state=enabled" -b
+
+This command uses the systemd module to check the status of the Squid service on all hosts in the all_app_servers group. The -a option specifies the arguments to pass to the module, in this case name=squid state=enabled to check if the Squid service is enabled. The -b option runs the command with elevated privileges using sudo
+
+===================================================================================================
+
+Task-2
+======
+
+As per details shared by the development team, the new application release has some dependencies on the back end. There are some packages/services that need to be installed on all app servers under Stratos Datacenter. As per requirements please perform the following steps:
+
+a. Install postfix package on all the application servers.
+
+b. Once installed, make sure it is enabled to start during boot.
+
+
+Solution:
+---------
+To install the postfix package on all application servers, you can use an Ansible playbook with the following task:
+
+
+- name: Install Postfix on all application servers
+  hosts: all_app_servers
+  become: true
+  tasks:
+    - name: Install Postfix package
+      package:
+        name: postfix
+        state: present
+In this playbook, we use the package module to install the postfix package on all hosts in the all_app_servers group. The become: true line enables privilege escalation, allowing the playbook to run with elevated privileges using sudo or a similar mechanism.
+
+Save the above task in a YAML file, for example install_postfix.yml, and execute the following command to run the playbook:
+
+
+ansible-playbook install_postfix.yml
+
+Make sure that you have Ansible installed and configured to connect to your hosts.
+
+
+========================
+
+To install the postfix package on a Debian/Ubuntu system, you can use the following command:
+
+
+sudo apt update
+sudo apt install -y postfix
+
+The first command updates the package cache, and the second command installs the postfix package.
+
+On a CentOS/RHEL system, you can use the following command to install the postfix package:
+
+
+sudo yum update
+sudo systemctl enable postfix
+sudo systemctl status postfix
+
+The first command updates the package cache, and the second command installs the postfix package.
+
+Make sure to run these commands with root or sudo privileges. Also, verify the correct package name if you are running a different version of the operating system or if you have made any custom configurations.
+

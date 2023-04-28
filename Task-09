@@ -1,0 +1,32 @@
+Tasks-9 Linux User Without Home
+===============================
+Keep your face always toward the sunshine, and shadows will fall behind you.
+
+– Walt Whitman
+
+The system admins team of xFusionCorp Industries has set up a new tool on all app servers, as they have a requirement to create a service user account that will be used by that tool. They are finished with all apps except for App Server 2 in Stratos Datacenter.
+
+Create a user named james in App Server 2 without a home directory.
+
+
+Solution:
+=========
+
+To create a user named "james" in App Server 2 without a home directory, you can use the useradd command with the -M option to prevent the creation of a home directory.
+
+Here are the steps to create the "james" user without a home directory:
+
+Log in to App Server 2 as a user with sudo privileges.
+
+Open a terminal window.
+
+Run the following command to create the "james" user without a home directory:
+
+
+#     sudo useradd -M james
+
+This command uses the useradd command with the -M option to create the "james" user without a home directory.
+
+After running the command, the "james" user will be created without a home directory.
+
+It's important to note that without a home directory, the user won't have a place to store files and configuration files that are typically located in a user's home directory. If the user needs a home directory later, you can create one for them using the mkdir command and then update the user's home directory using the usermod command.

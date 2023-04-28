@@ -1,0 +1,60 @@
+Task-13 Linux NTP Setup
+=======================
+Picture yourself as an indomitable power filled with positive attitude and faith that you are achieving your goals.
+
+– Napolean Hill
+
+===================================================================================================
+
+Task
+-----
+
+The system admin team of xFusionCorp Industries has noticed an issue with some servers in Stratos Datacenter where some of the servers are not in sync w.r.t time. Because of this, several application functionalities have been impacted. To fix this issue the team has started using common/standard NTP servers. They are finished with most of the servers except App Server 3. Therefore, perform the following tasks on this server:
+
+    Install and configure NTP server on App Server 3.
+
+    Add NTP server 1.sg.pool.ntp.org in NTP configuration on App Server 3.
+
+    Please do not try to start/restart/stop ntp service, as we already have a restart for this service scheduled for tonight and we don't want these changes to be applied right now.
+
+
+    ===================================================================
+
+Resolution:
+-----------
+    To install and configure NTP server on App Server 3 and add NTP server 1.sg.pool.ntp.org in NTP configuration, you can follow these steps:
+
+Open a terminal or SSH session to App Server 3.
+
+Install the NTP package using the following command:
+
+
+sudo apt-get install ntp
+
+Once the installation is complete, edit the NTP configuration file using your favorite text editor:
+
+
+sudo nano /etc/ntp.conf
+
+Find the server directive and add the NTP server 1.sg.pool.ntp.org to the list of servers:
+
+
+server 1.sg.pool.ntp.org
+
+You can add this server to the list of servers in the file or replace the existing servers.
+
+Save the changes to the file and exit the editor.
+
+Restart the NTP service to apply the changes:
+
+
+sudo systemctl restart ntp
+
+Verify that the NTP service is running and synchronized with the NTP server by running the following command:
+
+css
+Copy code
+sudo ntpq -p
+This should display a list of NTP servers that the system is synchronized with, including the 1.sg.pool.ntp.org server.
+
+That's it! You have successfully installed and configured the NTP server on App Server 3 and added the NTP server 1.sg.pool.ntp.org to the NTP configuration

@@ -1,0 +1,39 @@
+Task-10 Linux Remote Copy
+==========================
+Do the best you can. No one can do more than that.
+
+– John Wooden
+
+Task:
+-----
+One of the Nautilus developers has copied confidential data on the jump host in Stratos DC. That data must be copied to one of the app servers. Because developers do not have access to app servers, they asked the system admins team to accomplish the task for them.
+
+Copy /tmp/nautilus.txt.gpg file from jump server to App Server 3 at location /home/code.
+
+Solution
+---------
+on jumpbox:
+# Generate a key to establish connection with the app server 
+
+   ssh-keygen 
+
+# Copy the key to the app serv and check the connection
+
+  sudo ssh-copy-id -i ~/.ssh/id_rsa.pub banner@172.16.238.12
+  ssh  banner@172.16.238.12
+
+# Copy the file from jumpbox to Appserv  
+
+   scp  /tmp/nautilus.txt.gpg banner@172.16.238.12:/home/code
+
+=====================================================================================
+
+Assuming you have access to both the jump server and App Server 3, you can use the scp command to copy the nautilus.txt.gpg file from the jump server to App Server 3.
+
+Here's the command you can use:
+
+scp /tmp/nautilus.txt.gpg user@AppServer3:/home/code/
+
+Replace user with the username you use to log in to App Server 3. You will be prompted for the password for the user account on App Server 3.
+
+This command will copy the nautilus.txt.gpg file from the /tmp/ directory on the jump server to the /home/code/ directory on App Server 3. If the /home/code/ directory does not exist, it will be created automatically.

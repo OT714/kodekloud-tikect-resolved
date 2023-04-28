@@ -1,0 +1,31 @@
+Task-15 : Linux User Expiry
+===========================
+
+The greatest glory in living, lies not in never falling, but in rising every time we fall.
+
+– Nelson Mandela
+
+Task:
+-----
+
+A developer javed has been assigned Nautilus project temporarily as a backup resource. As a temporary resource for this project, we need a temporary user for javed. It’s a good idea to create a user with a set expiration date so that the user won't be able to access servers beyond that point.
+
+Therefore, create a user named javed on the App Server 2. Set expiry date to 2021-01-28 in Stratos Datacenter. Make sure the user is created as per standard and is in lowercase.
+
+
+Resolution:
+-----------
+
+Create a new user named Javed:
+
+- sudo adduser javed
+
+Press Enter and follow the prompts to set a password for the new user.
+
+To set the expiry date for the user, use the following command:
+
+- sudo chage -E 2021-01-28 javed
+
+Verify that the user has been created and the expiry date has been set correctly by running the following command:
+
+- sudo chage -l javed

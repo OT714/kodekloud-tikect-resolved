@@ -1,0 +1,88 @@
+Task-18 = Linux User Files
+=======
+
+If you can't explain it simply you don't understand it well enough.
+
+– Albert Einstein
+
+Task:
+-----
+There was some users data copied on Nautilus App Server 1 at /home/usersdata location by the Nautilus production support team in Stratos DC. Later they found that they mistakenly mixed up different user data there. Now they want to filter out some user data and copy it to another location. Find the details below:
+
+On App Server 1 find all files (not directories) owned by user kareem inside /home/usersdata directory and copy them all while keeping the folder structure (preserve the directories path) to /official directory.
+
+
+
+Resolution:
+===========
+To find all files owned by user kareem inside the /home/usersdata directory on App Server 1 and copy them to the /official directory while preserving the directory structure, you can use the find and cp commands.
+
+Here is an example command you can use:
+
+
+- find /home/usersdata -type f -user kareem -exec cp --parents {} /official \;
+
+Let's break down this command:
+
+find: This command is used to search for files and directories.
+
+/home/usersdata: This is the directory where we want to search for files.
+
+-type f: This option tells find to only search for files, not directories.
+
+-user kareem: This option tells find to only search for files owned by the user kareem.
+
+-exec: This option allows us to execute a command on each file that is found.
+
+cp --parents {} /official \;: This command will copy each file found to the /official directory while 
+preserving the directory structure. The {} is replaced with the filename of each file found.
+
+Note: The --parents option with the cp command is used to preserve the directory structure of the source file in the destination directory.
+
+
+
+====================================================================================================
+
+The find command :
+
+searches for files and directories recursively in a specified location on the file system.
+
+Here is an example command to find a file named "example.txt" on the entire system:
+
+
+- find / -name example.txt                   # for file
+
+
+This command will start the search at the root directory ("/") and search all directories and subdirectories for a file named "example.txt". The command will output the path of the file if it is found.
+
+If you know the general location of the file, you can restrict the search to a specific directory or path. For example, to search for the file only in the /home directory, you can use the following command:
+
+
+- find /home -name example.txt
+
+You can also use the locate command to find files on the system. However, the locate command requires a pre-built database of files to be created and updated regularly. To use the locate command to find a file named "example.txt", you can run the following command:
+
+
+- locate example.txt
+
+This command will search the pre-built database of files and output any matching file paths. However, the database may not be up-to-date, so it is recommended to use the find command for more accurate results.
+
+=======================================================================================================
+
+find command with the -type d option. The -type d option tells find to search for directories only.
+
+Here is an example command to find a directory named "exampledir" on the entire system:
+
+
+- find / -type d -name exampledir
+
+This command will start the search at the root directory ("/") and search all directories and subdirectories for a directory named "exampledir". The command will output the path of the directory if it is found.
+
+If you know the general location of the directory, you can restrict the search to a specific directory or path. For example, to search for the directory only in the /home directory, you can use the following command:
+
+
+- find /home -type d -name exampledir
+
+This command will search the /home directory and its subdirectories for a directory named "exampledir". If the directory is found, the command will output its path.
+
+Note that searching for a directory can take longer than searching for a file, especially if the directory is large and contains many subdirectories and files.

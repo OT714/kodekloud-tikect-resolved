@@ -1,0 +1,70 @@
+Task-23: Linux Configure sudo
+=======================================
+
+Always bear in mind that your own resolution to success is more important than any other one thing.
+
+– Abraham Lincoln
+
+
+Neither comprehension nor learning can take place in an atmosphere of anxiety.
+
+– Rose Kennedy
+
+
+The greatest glory in living, lies not in never falling, but in rising every time we fall.
+
+– Nelson Mandela
+
+Task:
+------
+
+We have some users on all app servers in Stratos Datacenter. Some of them have been assigned some new roles and responsibilities, therefore their users need to be upgraded with sudo access so that they can perform admin level tasks.
+
+a. Provide sudo access to user rose on all app servers.
+
+b. Make sure you have set up password-less sudo for the user.
+
+
+Resolution:
+---------------
+
+a-)
+Log in to each app server as the root user or a user with sudo privileges.
+
+Open the sudoers file using the command:
+
+sudo visudo
+
+Add the following line at the end of the file:
+
+rose ALL=(ALL) ALL
+
+This line grants the user "rose" full sudo privileges on the server.
+
+Save and exit the file by pressing "CTRL+X", then "Y", and then "ENTER".
+
+Repeat this process on all of the app servers where you want to grant "rose" sudo access.
+
+Note: It's important to be careful when editing the sudoers file, as incorrect modifications can lead to security issues or system instability. Always make sure to test your changes on a non-production system before applying them to a production environment.
+
+
+b)
+
+
+sudo visudo
+
+Add the following line at the end of the file:
+
+rose ALL=(ALL) NOPASSWD:ALL
+
+This line grants the user "rose" full sudo privileges on the server without prompting for a password.
+
+Save and exit the file by pressing "CTRL+X", then "Y", and then "ENTER".
+
+Test the sudo access by running a command with sudo as the "rose" user. For example, you can run the command:
+
+sudo ls -la /root
+
+This command should list the contents of the root directory without prompting for a password.
+
+Note: It's important to be careful when setting up password-less sudo access, as it can pose a security risk if the user's account is compromised. Only grant password-less sudo access to trusted users who require it for their work, and make sure to make sure to monitor their activity closely.

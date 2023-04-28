@@ -1,0 +1,85 @@
+Task-13 Create a Cron Job
+=========================
+
+You can’t go back and change the beginning, but you can start where you are and change the ending.
+
+– C.S. Lewis
+
+===================================================================================================
+Task:
+-----
+
+The Nautilus system admins team has prepared scripts to automate several day-to-day tasks. They want them to be deployed on all app servers in Stratos DC on a set schedule. Before that they need to test similar functionality with a sample cron job. Therefore, perform the steps below:
+
+a. Install cronie package on all Nautilus app servers and start crond service.
+
+b. Add a cron */5 * * * * echo hello > /tmp/cron_text for root user.
+
+
+Resolution:
+===========
+
+Assuming you have administrative privileges on all the Nautilus app servers, you can follow these steps to install the cronie package and start the crond service:
+
+Open a terminal or SSH session to each Nautilus app server.
+
+Update the package list:
+
+
+- sudo apt-get update
+- sudo yum update -y
+
+Install the cronie package:
+
+
+- sudo apt-get install cronie
+- sudo yum install cronie
+
+Once the installation is complete, start the crond service using the following command:
+
+
+- sudo systemctl start crond
+
+If you want the crond service to start automatically on system boot, enable it using the following command:
+
+
+sudo systemctl enable crond
+
+Verify that the crond service is running by checking its status using the following command:
+
+
+- sudo systemctl status crond
+
+This should display the current status of the crond service.
+
+Repeat steps 1-6 for each Nautilus app server.
+
+That's it! You have successfully installed the cronie package and started the crond service on all Nautilus app servers.
+
+
+B- To add a cron job that runs every 5 minutes and echoes "hello" to the /tmp/cron_text file for the root user, you can follow these steps:
+
+Open a terminal or SSH session to the system as the root user.
+
+Edit the root user's crontab file using the following command:
+
+
+- crontab -e
+
+Add the following line to the crontab file:
+
+
+- */5 * * * * echo hello > /tmp/cron_text
+
+This will run the echo command every 5 minutes and write "hello" to the /tmp/cron_text file.
+
+Save the changes to the crontab file and exit the editor.
+
+Verify that the cron job has been added by running the following command:
+
+
+- crontab -l
+
+This should display the current crontab entries for the root user, including the new cron job.
+
+That's it! You have successfully added a cron job that echoes "hello" to the /tmp/cron_text file every 5 minutes for the root user.

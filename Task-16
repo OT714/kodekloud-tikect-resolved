@@ -1,0 +1,37 @@
+Task-16= Linux Banner
+=======
+
+The greatest glory in living, lies not in never falling, but in rising every time we fall.
+
+– Nelson Mandela
+
+Task:
+-----
+During the monthly compliance meeting, it was pointed out that several servers in the Stratos DC do not have a valid banner. The security team has provided serveral approved templates which should be applied to the servers to maintain compliance. These will be displayed to the user upon a successful login.
+
+Update the message of the day on all application and db servers for Nautilus. Make use of the approved template located at /home/thor/nautilus_banner on jump host
+
+Resolution:
+===========
+
+update the message of the day on all application and database servers for Nautilus using the approved template located at /home/thor/nautilus_banner:
+
+Log in to each application and database server as an administrative user.
+Open the terminal or command prompt on each server.
+Navigate to the directory where the MOTD (message of the day) is stored. This may vary depending on the operating system and server configuration, but on many Linux systems, the MOTD is stored in the 
+/etc/ directory.
+
+Make a backup copy of the existing MOTD file by running the following command:
+
+- sudo cp /etc/motd /etc/motd.bak
+
+Replace the existing MOTD file with the new banner file by running the following command:
+
+- sudo cp /home/thor/nautilus_banner /etc/motd
+
+Confirm that the new MOTD banner is displayed by logging out and then logging back in to the server,
+ or by running the following command:
+
+- cat /etc/motd
+
+Repeat these steps for each application and database server in the Nautilus environment to ensure that the MOTD is updated on all systems.

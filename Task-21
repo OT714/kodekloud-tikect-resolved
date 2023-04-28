@@ -1,0 +1,142 @@
+Task-21 : Linux LogRotate
+==========================
+
+An investment in knowledge pays the best interest.
+
+– Benjamin Franklin
+
+Two things define you: your patience when you have nothing and your attitude when you have everything.
+
+– George Bernard Shaw
+
+Task:
+-----
+The Nautilus DevOps team is ready to launch a new application, which they will deploy on app servers in Stratos Datacenter. They are expecting significant traffic/usage of tomcat on app servers after that. This will generate massive logs, creating huge log files. To utilise the storage efficiently, they need to compress the log files and need to rotate old logs. Check the requirements shared below:
+
+a. In all app servers install tomcat package.
+
+b. Using logrotate configure tomcat logs rotation to monthly and keep only 3 rotated logs.
+
+(If by default log rotation is set, then please update configuration as needed)
+
+
+Resolution:
+-----------
+a-
+
+For Debian/Ubuntu:
+
+
+sudo apt-get update
+sudo apt-get install tomcat9
+
+For CentOS/RHEL:
+
+sudo yum install tomcat
+
+For Fedora:
+
+sudo dnf install tomcat
+
+
+These commands will download and install the Apache Tomcat package and all of its dependencies. Once the installation is complete, you can start the Tomcat service using the appropriate command for your distribution:
+
+For Debian/Ubuntu:
+
+sudo systemctl start tomcat9
+
+For CentOS/RHEL/Fedora:
+
+
+sudo systemctl start tomcat
+
+To ensure that the Tomcat service starts automatically when the system boots up, you can enable the service with the following command:
+
+For Debian/Ubuntu:
+
+
+sudo systemctl enable tomcat9
+
+For CentOS/RHEL/Fedora:
+
+
+sudo systemctl enable tomcat
+
+After enabling the service, the Tomcat server should start automatically whenever the system boots up.
+
+
+b.
+
+To configure log rotation for Apache Tomcat logs, you can use the logrotate tool on a Linux system. Here's an example configuration that will rotate Tomcat logs on a monthly basis and keep only the three most recent rotated logs:
+
+Create a new configuration file for Tomcat logs in the logrotate.d directory:
+
+
+sudo vi /etc/logrotate.d/tomcat
+
+Add the following configuration to the file:
+
+
+/var/log/tomcat/*.log {
+    monthly
+    rotate 3
+    compress
+    missingok
+    notifempty
+    create 0644 tomcat tomcat
+}
+This configuration tells logrotate to:
+
+Rotate Tomcat logs on a monthly basis (monthly).
+Keep only the three most recent rotated logs (rotate 3).
+Compress the rotated logs (compress).
+Ignore missing log files (missingok).
+Do not rotate an empty log file (notifempty).
+Create new log files with permissions 0644 and owned by the tomcat user and group (create 0644 tomcat tomcat).
+Save the configuration file and exit the editor.
+
+Test the configuration by running logrotate in debug mode:
+
+
+sudo logrotate -d /etc/logrotate.d/tomcat
+
+This will show you the actions that logrotate would take, but won't actually rotate the logs.
+
+Once you've verified that the configuration is working correctly, you can run logrotate on a regular basis using a cron job. For example, to run logrotate every day at midnight, you can add the following line to the system's crontab (sudo crontab -e):
+
+
+0 0 * * * /usr/sbin/logrotate /etc/logrotate.d/tomcat >/dev/null 2>&1
+
+This will run logrotate with the Tomcat configuration file every day at midnight, and redirect any output to /dev/null.
+
+With this configuration, Tomcat logs will be rotated on a monthly basis, and only the three most recent rotated logs will be kept. This will help to keep the logs from growing too large and consuming too much disk space.
+
+========================================================================================
+
+
+As per new application requirements shared by the Nautilus project development team, serveral new packages need to be installed on all app servers in Stratos Datacenter. Most of them are completed except for zip.
+
+Therefore, install the zip package on all app-servers.
+
+Resolution:
+-----------
+To install the zip package on a Linux-based system, you can use the package manager for your system. The package manager will download and install the zip package and any dependencies that it requires.
+
+Here are the commands to install the zip package on some common Linux distributions:
+
+On Ubuntu or Debian-based systems:
+
+
+
+sudo apt-get update
+sudo apt-get install zip
+
+On CentOS, Fedora, or Red Hat-based systems:
+
+
+sudo yum install zip
+On Arch Linux:
+
+
+sudo pacman -S zip
+These commands will install the zip package on your system. Once the installation is complete, you can use the zip command to create and manipulate zip archives.

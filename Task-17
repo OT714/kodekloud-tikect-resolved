@@ -1,0 +1,91 @@
+Task-17= MariaDB Troubleshooting
+=======
+
+Success doesn’t come to you, you go to it.
+
+– Marva Collins
+
+Task:
+-----
+There is a critical issue going on with the Nautilus application in Stratos DC. The production support team identified that the application is unable to connect to the database. After digging into the issue, the team found that mariadb service is down on the database server.
+
+Look into the issue and fix the same.
+
+Resolution:
+===========
+If the MariaDB service is down on your Red Hat system, you can troubleshoot the issue by following these steps:
+
+Check the MariaDB service status by running the following command:
+
+
+- systemctl status mariadb
+
+If the service is not running, you will see output similar to the following:
+
+
+mariadb.service - MariaDB database server
+Loaded: loaded (/usr/lib/systemd/system/mariadb.service; disabled; vendor preset: disabled)
+Active: inactive (dead)
+If the service is not running, start the service by running the following command:
+
+
+- systemctl start mariadb
+
+If the service starts successfully, you will see output similar to the following:
+
+
+mariadb.service - MariaDB database server
+Loaded: loaded (/usr/lib/systemd/system/mariadb.service; disabled; vendor preset: disabled)
+Active: active (running) since Tue 2023-04-13 08:00:00 UTC; 10min ago
+If the service fails to start, check the MariaDB error log for any error messages that may indicate the cause of the issue. The error log is typically located at /var/log/mariadb/mariadb.log. You can view the last 20 lines of the log file by running the following command:
+
+
+- tail -n 20 /var/log/mariadb/mariadb.log
+
+If there are errors in the log file, investigate the error messages and take appropriate action to resolve the issue. Common causes of MariaDB service failures include configuration errors, permission issues, and disk space problems.
+
+Once you have resolved the issue, restart the MariaDB service by running the following command:
+
+
+- systemctl restart mariadb
+
+Verify that the service is running by running the "systemctl status mariadb" command again.
+
+By following these steps, you can troubleshoot and resolve issues with the MariaDB service on Red Hat.
+
+
+2-----------------------------------------------------------------------------------------------------
+
+If you are encountering the error "Can't start server: can't create PID file: Permission denied" while trying to start the MariaDB service on Red Hat, it is likely due to a permissions issue with the directory where the MariaDB PID file is stored.
+
+To resolve this issue, you can follow these steps:
+
+Check the current permissions of the MariaDB PID directory by running the following command:
+
+
+- ls -ld /var/run/mariadb/
+
+If the permissions are not set to allow the MariaDB service to write to the directory, you will need to change the permissions.
+
+Change the permissions of the MariaDB PID directory by running the following command:
+
+
+- chmod 777 /var/run/mariadb/
+
+This command sets the permissions of the directory to allow read, write, and execute access for all users.
+
+Start the MariaDB service by running the following command:
+
+
+- systemctl start mariadb
+
+The service should now start successfully, and you should not see the "Can't create PID file" error.
+
+Once the service is running, you can revert the permissions of the MariaDB PID directory to a more secure setting by running the following command:
+
+
+- chmod 755 /var/run/mariadb/
+
+This command sets the permissions of the directory to allow read, write, and execute access for the owner of the directory, and read and execute access for all other users.
+
+By following these steps, you should be able to resolve the "Can't create PID file" error and start the MariaDB service on Red Hat.
