@@ -1,2 +1,71 @@
-Task-11
-========
+Task-11 Linux String Substitute (sed)
+======================================
+An investment in knowledge pays the best interest.
+
+– Benjamin Franklin
+
+====================================================================================
+
+Task
+-----
+There is some data on Nautilus App Server 2 in Stratos DC. Data needs to be altered in several of the files. On Nautilus App Server 2, alter the /home/BSD.txt file as per details given below:
+
+a. Delete all lines containing word copyright and save results in /home/BSD_DELETE.txt file. (Please be aware of case sensitivity)
+
+b. Replace all occurrence of word the to their and save results in /home/BSD_REPLACE.txt file.
+
+Note: Let's say you are asked to replace word to with from. In that case, make sure not to alter any words containing this string; for example upto, contributor etc.
+
+
+Resolution:
+-----------
+
+To delete all lines containing the word "copyright" from a file and save the results in /home/BSD_DELETE.txt, you can use the grep and sed commands in a pipeline.
+
+Here are the steps to delete all lines containing "copyright" and save the results to a file:
+
+
+
+Navigate to the directory that contains the file you want to modify using the cd command. For example, if the file is in the home directory, you can navigate there using the command cd ~.
+
+Run the following command to delete all lines containing "copyright":
+
+
+grep -v 'copyright' filename.txt | tee /home/BSD_DELETE.txt | sed -e '/^$/d'
+
+Replace filename.txt with the name of the file you want to modify. This command uses the grep command with the -v option to filter out all lines containing the word "copyright".
+
+The tee command is used to output the results to both the terminal window and the /home/BSD_DELETE.txt file.
+
+Finally, the sed command is used to delete any blank lines in the output.
+
+After running the command, all lines containing "copyright" will be deleted from the file.
+
+It's important to note that the tee command can be a powerful tool, so it's recommended to make a backup of the original file before making any changes. Additionally, if the file is large, the grep command may take some time to complete, so be patient.
+
+
+
+
+
+
+Replace all occurrence of word the to is and save results in /home/BSD_REPLACE.txt file
+To replace all occurrences of the word "the" with "is" in a file and save the results in /home/BSD_REPLACE.txt, you can use the sed command.
+
+Here are the steps to replace all occurrences of "the" with "is" and save the results to a file:
+
+Open a terminal window.
+
+Navigate to the directory that contains the file you want to modify using the cd command. For example, if the file is in the home directory, you can navigate there using the command cd ~.
+
+Run the following command to replace all occurrences of "the" with "is":
+
+
+- sed 's/the/is/g' filename.txt > /home/BSD_REPLACE.txt
+
+Replace filename.txt with the name of the file you want to modify. This command uses the sed command with the s option to substitute "the" with "is". The g option at the end of the command means that the replacement should be made globally (i.e., all occurrences of "the" in the file will be replaced).
+
+The > operator is used to redirect the output of the command to /home/BSD_REPLACE.txt.
+
+After running the command, all occurrences of "the" in the file will be replaced with "is", and the modified contents will be saved to /home/BSD_REPLACE.txt.
+
+It's important to note that the sed command modifies the file in place, so if you want to keep a backup of the original file, you should make a copy of it before running the command.
