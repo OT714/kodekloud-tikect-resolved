@@ -1,0 +1,100 @@
+Task-25: Web Server security
+================================================
+
+
+
+The only thing standing between you and outrageous success is continuous progress.
+
+– Dan Waldschmidt
+
+Task:
+------
+During a recent security audit, the application security team of xFusionCorp Industries found security issues with the Apache web server on Nautilus App Server 3 server in Stratos DC. They have listed several security issues that need to be fixed on this server. Please apply the security settings below:
+
+a. On Nautilus App Server 3 it was identified that the Apache web server is exposing the version number. Ensure this server has the appropriate settings to hide the version number of the Apache web server.
+
+b. There is a website hosted under /var/www/html/official on App Server 3. It was detected that the directory /official lists all of its contents while browsing the URL. Disable the directory browser listing in Apache config.
+
+c. Also make sure to restart the Apache service after making the changes.
+
+
+Reolution:
+----------
+
+To hide the version number of the Apache web server, you can follow these steps:
+
+Edit the Apache configuration file httpd.conf:
+
+- sudo nano /etc/httpd/conf/httpd.conf
+
+Add the following line to the file:
+
+
+- ServerTokens Prod
+
+This tells Apache to use the "ProductOnly" setting for the ServerTokens directive, which will hide the version number.
+
+Save the file and exit the editor.
+
+Restart the Apache service to apply the changes:
+
+
+- sudo systemctl restart httpd
+
+Verify that the version number is no longer exposed by accessing the Apache web server from a web browser and checking the server response headers. You can use the curl command to do this:
+
+- curl -I http://localhost/
+
+This should show a response header like:
+
+
+- Server: Apache
+
+Without the version number.
+
+With these steps, you have configured Apache to hide its version number in its response headers.
+
+
+b-)
+
+To disable directory browsing in Apache and prevent the contents of a directory from being displayed when browsing the URL, you can follow these steps:
+
+Edit the Apache configuration file for the virtual host or global configuration:
+
+
+sudo nano /etc/httpd/conf/httpd.conf
+
+Find the <Directory> directive that corresponds to the directory you want to disable directory browsing for. For example, if you want to disable directory browsing for the /official directory, find the following directive:
+
+
+<Directory "/var/www/html/official">
+
+Add the following line inside the <Directory> block:
+
+
+Options -Indexes
+
+This will disable directory indexing and prevent the directory contents from being displayed when browsing the URL.
+
+Save the file and exit the editor.
+
+Restart the Apache service to apply the changes:
+
+
+- sudo systemctl restart httpd
+
+With these steps, you have disabled directory browsing in Apache for the specified directory. Now, when you browse the URL for the directory, the contents will not be displayed and a "403 Forbidden" error will be returned instead.
+
+
+You can test whether directory browsing has been successfully disabled in Apache by trying to access the directory using a web browser.
+
+For example, if you disabled directory browsing for the /official directory, you can try to access it by entering the URL http://<your-server-ip>/official in your web browser.
+
+If directory browsing is disabled properly, you should see a "403 Forbidden" error page instead of the directory contents. If you still see the directory contents, it means that directory browsing is still enabled and you need to check your Apache configuration again.
+
+Additionally, you can also use the curl command in the terminal to check if directory browsing is disabled. For example, you can use the following command to retrieve the directory listing for the /official directory:
+
+
+- curl http://<your-server-ip>/official/
+
+If directory browsing is disabled, you should see a message similar to "Directory access is forbidden" instead of the directory listing. If you see the directory listing, it means that directory browsing is still enabled and you need to check your Apache configuration again.
