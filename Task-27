@@ -1,0 +1,91 @@
+Task-27 : Linux Bash Scripts
+========================================
+
+"You don’t learn to walk by following rules. You learn by doing, and falling over.""
+
+– Richard Branson
+
+"One day or day one. It's your choice."
+
+
+"Arise, awake, and stop not till the goal is reached."
+
+– Swami Vivekananda
+
+"Change is the end result of all true learning."
+
+– Leo Buscaglia
+
+
+Task:
+-----
+The production support team of xFusionCorp Industries is working on developing some bash scripts to automate different day to day tasks. One is to create a bash script for taking websites backup. They have a static website running on App Server 3 in Stratos Datacenter, and they need to create a bash script named beta_backup.sh which should accomplish the following tasks. (Also remember to place the script under /scripts directory on App Server 3)
+
+a. Create a zip archive named xfusioncorp_beta.zip of /var/www/html/beta directory.
+
+b. Save the archive in /backup/ on App Server 3. This is a temporary storage, as backups from this location will be clean on weekly basis. Therefore, we also need to save this backup archive on Nautilus Backup Server.
+
+c. Copy the created archive to Nautilus Backup Server server in /backup/ location.
+
+d. Please make sure script won't ask for password while copying the archive file. Additionally, the respective server user (for example, tony in case of App Server 1) must be able to run it.
+
+
+
+Resolution:
+-----------
+
+To create a bash script named beta_backup.sh that creates a zip archive of the /var/www/html/beta directory, you can follow these steps:
+
+Open a terminal window on App Server 3.
+
+Navigate to the /scripts directory by running the following command:
+
+
+- cd /scripts
+
+Create a new file named beta_backup.sh using the following command:
+
+- nano beta_backup.sh
+
+Add the following code to the file:
+
+#!/bin/bash
+
+
+zip -r /backup/xfusioncorp_beta.zip /var/www/html/beta
+
+scp -i /home/clint/.ssh/id_rsa /backup/xfusioncorp_beta.zip clint@172.16.238.16:/backup/
+
+
+
+Save the file by pressing Ctrl+O, then press Enter. Exit the editor by pressing Ctrl+X.
+
+Make the script executable by running the following command:
+
+
+chmod +x beta_backup.sh
+
+
+Test the script by running the following command:
+
+./beta_backup.sh
+
+This will create a zip archive named xfusioncorp_beta.zip in the /tmp directory, which contains all the files and directories in the /var/www/html/beta directory.
+
+
+To save the backup archive on Nautilus Backup Server, we can use the scp command in our bash script beta_backup.sh. Here's an example script that accomplishes all the required tasks:
+
+
+b-) Generate a ssh key and copy the key into the backup server for login without pawwsord
+
+
+- ssh-keygen
+
+- ssh-copy-id clint@ipaddress
+
+On Appserver run the script to execute the task 
+
+- sh beta_backup.sh
+
+It will execute the script by creating  the zip file and will backup that zip file in /backup directory in the backup server
+
