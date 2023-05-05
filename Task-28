@@ -1,0 +1,156 @@
+Task-28: Setup SSL for Nginx
+=============================
+
+If you really look closely, most overnight successes took a long time.
+
+– Steve Jobs
+
+Excellence happens not by accident. It is a process.
+
+– Dr. APJ. Abdul Kalam
+
+An investment in knowledge pays the best interest.
+
+– Benjamin Franklin
+
+Task:
+------
+
+The system admins team of xFusionCorp Industries needs to deploy a new application on App Server 3 in Stratos Datacenter. They have some pre-requites to get ready that server for application deployment. Prepare the server as per requirements shared below:
+
+    Install and configure nginx on App Server 3.
+
+    On App Server 3 there is a self signed SSL certificate and key present at location /tmp/nautilus.crt and /tmp/nautilus.key. Move them to some appropriate location and deploy the same in Nginx.
+
+    Create an index.html file with content Welcome! under Nginx document root.
+
+    For final testing try to access the App Server 3 link (either hostname or IP) from jump host using curl command. For example curl -Ik https://<app-server-ip>/.
+Resolution:
+-----------
+
+
+History:
+
+=======
+1- install nginx 
+
+ --> you need to install epel first which an additional repository that provides the nginx package (EPEL = Extra Packages for Enterprise Linux) repository. Here are the steps to install and configure the EPEL repository on a CentOS/RHEL system:
+
+ sudo yum install epel-release -y     
+ sudo yum install nginx -y
+
+
+2- vi into /etc/nginx/ngin.conf and make sure that the file look this:
+============================================================================
+ # For more information on configuration, see:
+#   * Official English Documentation: http://nginx.org/en/docs/
+#   * Official Russian Documentation: http://nginx.org/ru/docs/
+
+user nginx;
+worker_processes auto;
+error_log /var/log/nginx/error.log;
+pid /run/nginx.pid;
+
+# Load dynamic modules. See /usr/share/doc/nginx/README.dynamic.
+include /usr/share/nginx/modules/*.conf;
+
+events {
+    worker_connections 1024;
+}
+
+http {
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for"';
+
+    access_log  /var/log/nginx/access.log  main;
+
+    sendfile            on;
+    tcp_nopush          on;
+    tcp_nodelay         on;
+    keepalive_timeout   65;
+    types_hash_max_size 4096;
+
+    include             /etc/nginx/mime.types;
+    default_type        application/octet-stream;
+
+    # Load modular configuration files from the /etc/nginx/conf.d directory.
+    # See http://nginx.org/en/docs/ngx_core_module.html#include
+    # for more information.
+    include /etc/nginx/conf.d/*.conf;
+
+    server {
+        listen       80;
+        listen       [::]:80;
+        server_name 172.16.238.12;                                     ----> add ip@ of server
+        root         /usr/share/nginx/html;
+
+        # Load configuration files for the default server block.
+        include /etc/nginx/default.d/*.conf;
+
+        error_page 404 /404.html;
+        location = /404.html {
+        }
+
+        error_page 500 502 503 504 /50x.html;
+        location = /50x.html {
+        }
+    }
+
+# Settings for a TLS enabled server.
+#
+    server {
+        listen       443 ssl http2;
+        listen       [::]:443 ssl http2;
+        server_name  172.16.238.12;                                         ----> add ip@ of server
+        root         /usr/share/nginx/html;
+
+        ssl_certificate "/etc/pki/CA/certs/nautilus.crt";             ---> change default to this  CA/certs/nautilus.crt
+        ssl_certificate_key "/etc/pki/CA/private/nautilus.key";       ----> change default to CA/private/nautilus.key
+        ssl_session_cache shared:SSL:1m;
+        ssl_session_timeout  10m;
+        ssl_ciphers HIGH:!aNULL:!MD5;
+        ssl_prefer_server_ciphers on;
+
+        # Load configuration files for the default server block.
+        include /etc/nginx/default.d/*.conf;
+
+        location / {                                                   --->
+        }
+
+        error_page 404 /404.html;
+            location = /40x.html {
+        }
+
+        error_page 500 502 503 504 /50x.html;
+            location = /50x.html {
+        }
+    }
+
+}
+   
+ 3- Move the certificate and key files to the directory:
+     cp /tmp/nautilus.crt /etc/pki/CA/certs/
+     cp /tmp/nautilus.key /etc/pki/CA/private/
+
+
+ 4- Check if everything is as required
+
+      cat /etc/nginx/nginx.conf |grep root
+
+ 5- Create the content message in index.html
+    before you have to remove the previous one 
+
+      ll -lsd /usr/share/nginx/html/index.html 
+      rm /usr/share/nginx/html/index.html 
+      vi /usr/share/nginx/html/index.html  ---> insert the message and save
+
+  6- Start nginx
+
+     systemctl start nginx
+     systemctl status nginx
+
+  7- Check if you can access it from a different  browser
+   
+    curl -Ik https://stapp03
+   
