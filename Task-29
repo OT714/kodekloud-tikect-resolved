@@ -1,0 +1,53 @@
+Task-29: Linux GPG Encryption
+=============================
+
+An investment in knowledge pays the best interest.
+
+– Benjamin Franklin
+
+
+Task:
+-----
+
+We have confidential data that needs to be transferred to a remote location, so we need to encrypt that data.We also need to decrypt data we received from a remote location in order to understand its content.
+
+On storage server in Stratos Datacenter we have private and public keys stored /home/*_key.asc. Use those keys to perform the following actions.
+
+    Encrypt /home/encrypt_me.txt to /home/encrypted_me.asc.
+
+    Decrypt /home/decrypt_me.asc to /home/decrypted_me.txt. (Passphrase for decryption and encryption is kodekloud).
+
+
+Resolution:
+------------
+
+Steps
+-----
+ # Switch to root user
+       - sudo su -
+       - cd /home/
+         ll
+ #  To import the keys on the server  
+       - gpg --import /home/public_key.asc
+
+       - gpg --import /home/private_key.asc
+          gpg --list-keys
+          gpg --list-secret-keys
+
+ #  Encrypt file
+       
+      -  gpg --encrypt -r kodekloud@kodekloud.com --armor < encrypt_me.txt -o encrypted_me.asc
+         ll
+   
+ #  Decrypt file
+   
+      -  gpg --decrypt decrypt_me.asc > decrypted_me.txt
+         ll
+
+ #  Verify 
+     
+       cat encrypt_me.txt 
+       cat encrypted_me.asc 
+       cat decrypt_me.asc 
+       cat decrypted_me.txt 
+     

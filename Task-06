@@ -1,1 +1,41 @@
-Task-6
+Task-6: DNS Troubleshooting
+============================
+
+The system admins team of xFusionCorp Industries 
+has noticed intermittent issues with DNS resolution 
+in several apps . App Server 3 in Stratos 
+Datacenter is having some DNS resolution issues 
+so we want to add some additional DNS 
+nameservers on this server. 
+As a temporary fix we have decided to go with Google 
+public DNS (ipv4). Please make appropriate changes on this server.
+
+Resolution:
+------------
+
+To add additional DNS nameservers on a server, you can edit the /etc/resolv.conf file. This file contains the DNS resolver configuration for the system.
+
+Here are the steps to add Google public DNS (IPv4) to the /etc/resolv.conf file:
+
+Open the /etc/resolv.conf file in a text editor with root privileges. For example, you can use the following command to open the file in the Nano editor:
+
+- sudo nano /etc/resolv.conf
+
+Add the following lines to the file:
+
+nameserver 8.8.8.8
+nameserver 8.8.4.4
+
+These lines specify the Google public DNS nameservers (IPv4).
+
+Save the changes to the file and exit the editor.
+Note that the /etc/resolv.conf file may be overwritten by the system if you are using a DHCP client to obtain network settings. To make the changes permanent, you may need to edit the network configuration files for your system. This can vary depending on your Linux distribution and network setup.
+
+On most modern Linux systems, you can add the DNS nameservers to the network configuration file for your network interface. For example, on a system using the systemd network manager, you can edit the /etc/systemd/network/50-dhcp-client.conf file to add the DNS nameservers:
+
+
+[DHCP]
+UseDNS=false
+DNS=8.8.8.8 8.8.4.4
+
+This will configure the DHCP client to use the specified DNS nameservers instead of the ones provided by the DHCP server. Note that you may need to restart the network service or reboot the system for the changes to take effect.
