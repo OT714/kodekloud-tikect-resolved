@@ -1,0 +1,181 @@
+Task-32: linux postfix mail server 
+=======================================
+
+One big reason for a winning attitude is that you will take 
+the necessary steps and not quit when the going gets difficult.
+
+– Don M.Green
+
+Success is not final, failure is not fatal: it is the courage to continue that counts.
+
+– Winston Churchill
+
+Losers visualize the penalties of failure, Winners visualize the rewards of success.
+
+– Dr.Rob Gilbert
+
+Task:
+------
+
+xFusionCorp Industries has planned to set up a common email server in Stork DC. After several meetings and recommendations they have decided to use postfix as their mail transfer agent and dovecot as an IMAP/POP3 server. We would like you to perform the following steps:
+
+    Install and configure postfix on Stork DC mail server.
+
+    Create an email account mark@stratos.xfusioncorp.com identified by YchZHRcLkL.
+
+    Set its mail directory to /home/mark/Maildir.
+
+    Install and configure dovecot on the same server.
+
+    Resolution:   ssh groot@172.16.238.17   Gr00T123 
+    --------------
+    1- Login on mail server  and switch to root user
+
+    - sudo su - 
+
+    - rpm -qa |grep postfix
+    - rpm -qa |grep dovecot
+
+    2- Both packages need to install and configure 
+
+    - yum install postfix -y
+
+    - vi /etc/postfix/main.cf
+
+    # INTERNET HOST AND DOMAIN NAMES
+
+   Change this default information from :
+    #myhostname = host.domain.tld
+    #myhostname = virtual.domain.tld
+ to
+     #myhostname = host.domain.tld
+     myhostname = stmail01.stratos.xfusioncorp.com
+
+
+   3- Scroll down and uncommented mydomain:
+
+   -  mydomain = stratos.xfusioncorp.com
+
+   -  myorigin = $mydomain
+
+   -  inet_interfaces = all
+
+   -  #inet_interfaces = localhost     =====> comment this line
+
+   -  #mydestination = $myhostname, localhost.$mydomain, localhost                        ===> comment
+
+   -  mydestination = $myhostname, localhost.$mydomain, localhost, $mydomain              ===> uncomment
+
+   -  #mynetworks = 168.100.189.0/28, 127.0.0.0/8   ====> uncomment and Change the ip@ with the ip@ of the mail server network
+
+        mynetworks = 172.16.238.0/24, 127.0.0.0/8
+
+
+   -  home_mailbox = Maildir/                                                              ===> uncomment
+
+
+   - systemctl start postfix
+   - systemctl status postfix
+
+
+   4- Create user mariyam with given password
+
+    - useradd mariyam
+    - passwd mariyam 
+    - cat /etc/passwd |grep mariyam
+
+    ls -l /home/mariyam
+
+    5- verify the postfix by telnet command
+
+      telnet stmail01 25
+      EHLO localhost
+      -
+      -
+      -
+      mail from:mariyam@stratos.xfusioncorp.com
+250 2.1.0 Ok
+rcpt to:mariyam@stratos.xfusioncorp.com
+250 2.1.5 Ok
+DATA
+354 End data with <CR><LF>.<CR><LF>
+test mail
+.
+quit
+
+  mailq
+
+switch user to mariyam:
+ su - mariyam
+ mailq
+ ll
+ cd Maildir/
+ ll
+based on informations in this directory you can see that postfix is created
+ cat new/1684606919.V16000c8I1e8bb9eM601654.stmail01.stratos.xfusioncorp.com
+
+output:
+-------
+    Return-Path: <rose@stratos.xfusioncorp.com>
+X-Original-To: rose@stratos.xfusioncorp.com
+Delivered-To: rose@stratos.xfusioncorp.com
+Received: from localhost (stmail01 [172.16.238.17])
+        by stmail01.stratos.xfusioncorp.com (Postfix) with ESMTP id 992C51820451
+        for <rose@stratos.xfusioncorp.com>; Sat, 20 May 2023 18:20:21 +0000 (UTC)
+Message-Id: <20230520182038.992C51820451@stmail01.stratos.xfusioncorp.com>
+Date: Sat, 20 May 2023 18:20:21 +0000 (UTC)
+From: rose@stratos.xfusioncorp.com
+
+test mail
+
+exit
+
+--------------------
+install dovecot
+--------------------
+6- switch back to root user
+
+sudo su -
+- sudo yum install dovecot -y
+
+- vi /etc/dovecot/dovecot.conf
+
+protcols = imap pop3 lmtp                                                 ===> uncomment
+
+Save
+
+
+- vi /etc/dovecot/conf.d/10-mail.conf
+  
+  mail_location = maildir:~/Maildir                                       ===> uncomment   
+
+-  vi /etc/dovecot/conf.d/10-auth.conf  
+
+  disable_plaintext_auth = yes                                            ===> uncomment 
+
+  auth_mechanisms = plain login
+
+-  vi /etc/dovecot/conf.d/10-master.conf
+
+    unix_listener auth-userdb {
+      #mode = 0666
+      user = postfix
+      group = postfix
+    }
+
+- systemctl start dovecot
+- systemctl status dovecot
+
+Validate dovecot with telnet
+
+- telnet stmail01 110
+user {username}
+
+pass {passwd}
+
+retr 1
+
+quit
+
+
+ss -tulnp
