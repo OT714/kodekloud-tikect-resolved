@@ -1,0 +1,45 @@
+Task-31: Application Security
+=======================================
+
+There is only one success - to be able to spend your life in your own way.
+
+– Christopher Morley
+
+All you need is the plan, the road map, and the courage to press on to your destination.
+
+– Earl Nightingale
+
+Task:
+-----
+We have a backup management application UI hosted on Nautilus's backup server in Stratos DC. That backup management application code is deployed under Apache on the backup server itself, and Nginx is running as a reverse proxy on the same server. Apache and Nginx ports are 5004 and 8099, respectively. We have iptables firewall installed on this server. Make the appropriate changes to fulfill the requirements mentioned below:
+
+We want to open all incoming connections to Nginx's port and block all incoming connections to Apache's port. Also make sure rules are permanent.
+
+Resolution:
+============
+
+# Switch as root user
+   sudo su -
+
+   systemctl status iptables
+
+    iptables -L
+
+    iptables start
+
+      iptables -A INPUT -p tcp --dport 8099 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+
+      iptables -A INPUT -p tcp --dport 5004 -m conntrack --ctstate NEW -j REJECT
+      systemctl start iptables
+    
+      systemctl status iptables
+     
+      service iptables save
+
+      iptables -L
+     
+      service ipatbles save
+
+      systemctl status iptables
+      
+     iptables -L
