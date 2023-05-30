@@ -1,0 +1,111 @@
+Task-33: Install And Configure SFTP
+======================================================
+
+Question everything. Learn something. Answer nothing.
+
+– Euripides
+
+Practice as if you are the worst, Perform as if you are the best.
+
+
+Task:
+-----
+
+Some of the developers from Nautilus project team have asked for SFTP access to at least one of the app server in Stratos DC. After going through the requirements, the system admins team has decided to configure the SFTP server on App Server 3 server in Stratos Datacenter. Please configure it as per the following instructions:
+
+a. Create an SFTP user mark and set its password to B4zNgHA7Ya.
+
+b. Password authentication should be enabled for this user.
+
+c. Set its ChrootDirectory to /var/www/app.
+
+d. SFTP user should only be allowed to make SFTP connections.
+
+Resolution:
+================
+
+1- Switch to root user
+
+  sudo su -
+
+  useradd mark
+
+  passwd mark 
+
+2- Create the directory
+
+   mkdir -p /var/www/app
+   ls -lsd /var/wwww/app
+
+ cat /etc/ssh/sshd_config |grep sftp -A 10 
+
+  vi  etc/ssh/sshd_config 
+
+  # Comment this line and add :
+
+  Subsystem       sftp    /usr/libexec/openssh/sftp-server
+
+  #Subsystem       sftp    /usr/libexec/openssh/sftp-server and add
+
+  Subsystem       sftp    internal-sftp
+  Match User mark
+ 
+  ForceCommand internal-sftp
+  PasswordAuthentication yes
+  ChrootDirectory /var/www/app
+  PermitTunnel no
+  AllowAgentForwarding  no
+  AllowTcpForwarding  no
+  X11Forwarding    no
+
+# Change ownership and mode of the file /var/www/app 
+
+  chown root:root /var/www
+  chmod -R 755 /var/www
+  chmod -R 755 /var/www/app
+  chown -R mark /var/www/app
+  chown -R root /var/www/app
+  chown -R root /var/www/
+  chmod -R 755  /var/www
+
+# Restart sshd service
+
+   systemctl restart sshd
+
+   systemctl status sshd
+
+# Check sftp 
+
+   sftp mark@localhost
+
+If it connects to the sftp server it ok
+
+# Check if ssh is still allow
+
+  ssh mark@localhost
+
+  The answer need to be :
+
+  This service allows sftp connections only.
+  Connection to localhost closed.
+
+End of the Task------------------------>
+
+------
+Nb:
+-----
+
+ cat /etc/ssh/ssh_config |grep sftp -A 10 
+ =========================================================================================================================== 
+     "cat" is a command used to display the contents of a file. In this case, it is used to display the contents of the file "/etc/ssh/ssh_config".
+
+"/etc/ssh/ssh_config" is the path to the configuration file for the SSH client on your system. It contains various settings and options related to the SSH protocol.
+
+The "|" symbol is a pipe operator that redirects the output of the "cat" command to the "grep" command.
+
+"grep" is a command-line utility used for searching patterns in text files. In this case, it is used to search for the string "sftp" within the output of the "cat" command.
+
+"-A 10" is an option for the "grep" command. It tells "grep" to display 10 lines after each matched line.
+
+Therefore, the command as a whole is searching for occurrences of the string "sftp" in the "/etc/ssh/ssh_config" file and displaying the 10 lines that follow each matched line. This can be helpful for quickly identifying and reviewing sections of the SSH configuration related to SFTP (Secure File Transfer Protocol).
+=========================================================================================================================
