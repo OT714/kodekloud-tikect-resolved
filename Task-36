@@ -1,0 +1,114 @@
+Task-36: Install and Configure PostgreSQL
+==========================================
+
+Picture yourself as an indomitable power filled with positive attitude and faith that you are achieving your goals.
+
+– Napolean Hill
+
+One day or day one. It's your choice.
+
+
+If you really look closely, most overnight successes took a long time.
+
+– Steve Jobs
+
+Task:
+-------
+The Nautilus application development team has shared that they are planning to deploy one newly developed application on Nautilus infra in Stratos DC. The application uses PostgreSQL database, so as a pre-requisite we need to set up PostgreSQL database server as per requirements shared below:
+
+a. Install and configure PostgreSQL database on Nautilus database server.
+
+b. Create a database user kodekloud_cap and set its password to B4zNgHA7Ya.
+
+c. Create a database kodekloud_db3 and grant full permissions to user kodekloud_cap on this database.
+
+d. Make appropriate settings to allow all local clients (local socket connections) to connect to the kodekloud_db3 database through kodekloud_cap user using md5 method (Please do not try to encrypt password with md5sum).
+
+e. At the end its good to test the db connection using these new credentials from root user or server's sudo user.
+
+Resolution:
+===========
+a- Install and configure PostgreSQL database on Nautilus database server
+
+   - yum -y install postgresql-server postgresql-contrib
+  
+   - postgresql-setup initdb
+
+   - systemctl enable postgresql
+   - systemctl start postgresql
+   - systemctl status postgresql
+
+
+b: Create a database user and set its password 
+    
+   to login in postgresql db: 
+
+   - sudo -u postgres psql
+
+   - CREATE USER kodekloud_cap WITH PASSWORD 'dCV3szSGNA';
+
+c: Create a database kodekloud_db3 and grant full permissions to user kodekloud_cap on this database
+
+   - CREATE DATABASE kodekloud_db3;
+   - GRANT ALL PRIVILEGES ON DATABASE "kodekloud_db3" to "kodekloud_cap";
+     \q
+
+d: Make appropriate settings to allow all local clients (local socket connections) to connect to the kodekloud_db3 database through kodekloud_cap user using md5 method:
+
+   - vi /var/lib/pgsql/data/postgresql.conf
+   
+
+		listen_addresses = 'localhost'         # what IP address(es) to listen on;
+		                                        # comma-separated list of addresses;
+		                                        # defaults to 'localhost'; use '*' for all
+		                                        # (change requires restart)
+		#port = 5432                            # (change requires restart)
+
+		   #### Uncomment listen line
+
+   - cat  /var/lib/pgsql/data/postgresql.conf |grep listen
+
+
+   - vi /var/lib/pgsql/data/pg_hba.conf
+
+
+		# TYPE  DATABASE        USER            ADDRESS                 METHOD
+
+		# "local" is for Unix domain socket connections only
+		local   all             all                                     md5
+		# IPv4 local connections:
+		host    all             all             127.0.0.1/32            md5
+		# IPv6 local connections:
+		host    all             all             ::1/128                 md5
+
+
+  Restart postgresql and test if all local clients (local socket connections) to connect to the kodekloud_db3 database through kodekloud_cap user using md5 method: :
+
+   - systemctl restart postgresql
+
+localhost:
+ - psql -U kodekloud_cap -d kodekloud_db3 -h localhost -W #(paste password when it will promt)
+
+loopback address:
+ - psql -U kodekloud_cap -d kodekloud_db3 -h 127.0.0.1 -W
+
+ if it connects to the db that means everything is OK
+
+
+ History:
+ --------
+
+ 1  yum -y install postgresql-server postgresql-contrib
+    2  postgresql-setup initdb
+    3  systemctl enable postgresql
+    4    systemctl start postgresql
+    5    systemctl status postgresql
+    6  sudo -u postgres psql
+    7  vi /var/lib/pgsql/data/postgresql.conf
+    8  vi /var/lib/pgsql/data/pg_hba.conf
+    9  systemctl restart postgresql
+   10  systemctl status postgresql
+   11  psql -U kodekloud_cap -d kodekloud_db3 -h localhost -W
+   12  psql -U kodekloud_cap -d kodekloud_db3 -h 127.0.0.0 -W
+   13  psql -U kodekloud_cap -d kodekloud_db3 -h 127.0.0.1 -W
+   
