@@ -1,4 +1,4 @@
-Task-38:
+Task-38: Linux Bash Scripts
 =============================================
 
 Arise, awake, and stop not till the goal is reached.
@@ -17,3 +17,63 @@ b. Save the archive in /backup/ on App Server 1. This is a temporary storage, as
 c. Copy the created archive to Nautilus Backup Server server in /backup/ location.
 
 d. Please make sure script won't ask for password while copying the archive file. Additionally, the respective server user (for example, tony in case of App Server 1) must be able to run it.
+
+Resolution:
+-----------
+
+To create a bash script named beta_backup.sh that creates a zip archive of the /var/www/html/beta directory, you can follow these steps:
+
+Open a terminal window on App Server 1.
+
+Navigate to the /scripts directory by running the following command:
+
+
+- cd /scripts
+
+Create a new file named beta_backup.sh using the following command:
+
+- nano official_backup.sh
+
+Add the following code to the file:
+
+#!/bin/bash
+
+
+zip -r /backup/xfusioncorp_beta.zip /var/www/html/beta
+
+scp -i /home/clint/.ssh/id_rsa /backup/xfusioncorp_official.zip clint@172.16.238.16:/backup/
+
+
+
+Save the file by pressing Ctrl+O, then press Enter. Exit the editor by pressing Ctrl+X.
+
+Make the script executable by running the following command:
+
+
+chmod +x official_backup.sh
+
+
+Test the script by running the following command:
+
+./official_backup.sh
+
+This will create a zip archive named xfusioncorp_official.zip in the /tmp directory, which contains all the files and directories in the /var/www/html/beta directory.
+
+
+To save the backup archive on Nautilus Backup Server, we can use the scp command in our bash script beta_backup.sh. Here's an example script that accomplishes all the required tasks:
+
+
+b-) Generate a ssh key and copy the key into the backup server for login without pawwsord
+
+
+- ssh-keygen
+
+- ssh-copy-id clint@ipaddress
+
+==== ssh-copy-id clint@172.16.238.16
+
+On Appserver run the script to execute the task 
+
+-  ./official_backup.sh
+
+It will execute the script by creating  the zip file and will backup that zip file in /backup directory in the backup server

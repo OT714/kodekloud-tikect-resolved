@@ -27,6 +27,8 @@ xFusionCorp Industries has planned to set up a common email server in Stork DC. 
 
     Install and configure dovecot on the same server.
 
+
+
     Resolution:   ssh groot@172.16.238.17   Gr00T123 
     --------------
     1- Login on mail server  and switch to root user
@@ -95,7 +97,7 @@ xFusionCorp Industries has planned to set up a common email server in Stork DC. 
       -
       mail from:mariyam@stratos.xfusioncorp.com
 250 2.1.0 Ok
-rcpt to:mariyam@stratos.xfusioncorp.com
+rcpt to:mariyam@stratos.xfusioncorp.com  
 250 2.1.5 Ok
 DATA
 354 End data with <CR><LF>.<CR><LF>

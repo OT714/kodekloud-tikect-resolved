@@ -1,1 +1,82 @@
 Task-5
+========
+
+Learning never exhausts the mind.
+
+– Leonardo da Vinci
+
+Success doesn’t come to you, you go to it.
+
+– Marva Collins
+
+Don't give up. Normally it is the last key on the ring which opens the door.
+
+– Paulo Coelho
+
+
+New tools have been installed on the app server in Stratos Datacenter. Some of these tools can only be managed from the graphical user interface. Therefore, there are requirements for these app servers.
+
+On all App servers in Stratos Datacenter change the default runlevel so that they can boot in GUI (graphical user interface) by default. Please do not try to reboot these servers
+
+
+systemctl status runlevel5.target
+
+response :
+---------
+ graphical.target - Graphical Interface
+   Loaded: loaded (/usr/lib/systemd/system/graphical.target; static; vendor preset: disabled)
+   Active: active since Sat 2023-03-25 02:39:51 UTC; 25s ago
+     Docs: man:systemd.special(7)
+
+Mar 25 02:39:51 stapp03.stratos.xfusioncorp.com systemd[1]: Job graphical.target/start finished, result=done
+Mar 25 02:39:51 stapp03.stratos.xfusioncorp.com systemd[1]: Reached target Graphical Interface.
+
+=========================================================================================================
+
+
+Notes:
+------
+Select a target
+
+Target                                       Purpose
+graphical.target             multiple user, GUI and text based login
+Multi-user.target            multiple user and text based login no GUI
+rescue.target                sulogin prompt, basis system initialization completed
+emergency.target             sulogin prompt, initramfs pivot complete and system root mount on / read only
+
+   Runlevel            Target Units     Description
+0 runlevel0.target, poweroff.target Shut down and power off the system.
+1 runlevel1.target, rescue.target     Set up a rescue shell.
+2 runlevel2.target, multi-user.target Set up a non-graphical multi-user system.
+3 runlevel3.target, multi-user.target Set up a non-graphical multi-user system.
+4 runlevel4.target, multi-user.target Set up a non-graphical multi-user system.
+5 runlevel5.target, graphical.target Set up a graphical multi-user system.
+6 runlevel6.target, reboot.target     Shut down and reboot the system.
+
+Old Command        New Command                          Description
+runlevel        systemctl list-units --type target     Lists currently loaded target units.
+telinit runlevel   systemctl isolate name.target       Changes the current target.
+
+sudo systemctl set-default graphical.target     Change the default runlevel
+ 
+Commands
+systemctl list-dependencies graphical.target | grep target
+
+
+- To check the default target currently use by your system
+
+           systemctl get-default
+
+- To modify the default behavior of our system i need to vi in :
+
+           /etc/grub2.cfg  
+           /etc/dracut.conf
+
+- Difference b/w boot-reboot-shutdown
+   - boot   - is when your system is shutdown and you want it to .....
+   - reboot - is to bring your running system down and bring it up after that
+
+   - halt   -  is bring all your service down and you will have to bring them up manually
+
+
+

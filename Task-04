@@ -1,1 +1,50 @@
 Task-4
+========
+
+An investment in knowledge pays the best interest.
+
+– Benjamin Franklin
+===============================================================================================================
+
+
+The Nautilus team doesn't want its data to be accessed by any of the other groups/teams due to security reasons and want their data to be strictly accessed by the dbadmin group of the team.
+
+Setup a collaborative directory /dbadmin/data on Nautilus App 3 server in Stratos Datacenter.
+
+The directory should be group owned by the group dbadmin and the group should own the files inside the directory. The directory should be read/write/execute to the group owners, and others should not have any access.
+
+Solution:
+---------
+To setup a collaborative directory /dbadmin/data on Nautilus App 3 with the specified permissions, follow these steps:
+
+Create the directory using the mkdir command with the -p option to create any necessary parent directories:
+
+
+sudo mkdir -p /dbadmin/data
+
+- Set the group ownership of the directory to dbadmin using the chgrp command:
+
+sudo chgrp dbadmin /dbadmin/data
+
+- Set the group permissions of the directory to read, write, and execute using the chmod command:
+
+sudo chmod g+rwx /dbadmin/data
+
+- Set the default group ownership and permissions for any new files created in the directory using the setgid and chmod commands:
+
+sudo chown -R :dbadmin /dbadmin/data
+sudo chmod -R g+rwxs /dbadmin/data
+The setgid bit (s) ensures that new files inherit the group ownership of the parent directory.
+
+The g+rwxs permissions ensure that new files are group writable, have the same group ownership as the parent directory, and have the setgid bit set.
+
+Verify the directory permissions using the ls command with the -l option:
+u
+
+ls -ld /dbadmin/data
+
+The output should show that the directory is owned by root and the group is dbadmin, and the group permissions are set to read, write, and execute (rwx) and the setgid bit (s):
+
+
+drwxrwsr-x 2 root dbadmin 4096 Mar 22 09:00 /dbadmin/data
+``

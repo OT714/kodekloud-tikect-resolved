@@ -1,0 +1,62 @@
+Task-2
+========
+
+During the daily standup, it was pointed out that the timezone across Nautilus Application Servers in Stratos Datacenter doesn't match with that of the local datacenter's timezone, which is Pacific/Bougainville
+
+Resolution Steps:
+=================
+
+To match the local datacenter's timezone to Pacific/Bougainville, you can follow these steps:
+
+Check the current timezone on your system using the timedatectl command:
+
+timedatectl
+This will show you the current timezone, such as Asia/Tokyo.
+
+If the timezone is not already set to Pacific/Bougainville, you can use the timedatectl command to set it:
+
+
+sudo timedatectl set-timezone Pacific/Bougainville
+This will change the system's timezone to Pacific/Bougainville.
+
+Verify that the timezone has been set correctly by running timedatectl again:
+
+timedatectl
+This should show you the updated timezone.
+
+Note that changing the timezone on your system may affect any applications or services that rely on the system's timezone. You should test any critical applications or services to ensure that they are still functioning correctly after changing the timezone.
+
+
+# ansible-playbook to match the local datacenter's timezone to match Pacific/Bougainville?
+
+To write an Ansible playbook to match the local datacenter's timezone to Pacific/Bougainville, you can follow these steps:
+
+Create a new playbook file, such as timezone.yml.
+
+Define the target hosts for the playbook in the hosts section of the playbook. For example, to target all hosts in the webservers group, you can use the following:
+
+---
+- hosts: webservers
+Define a task to set the timezone using the timedatectl module. The timedatectl module allows you to manage the system's timezone.
+
+yaml
+---
+- hosts: webservers
+  tasks:
+    - name: Set timezone to Pacific/Bougainville
+      become: true
+      timedatectl:
+        timezone: Pacific/Bougainville
+
+In this example, the become keyword is used to run the task as the root user, which is necessary to modify the system's timezone.
+
+Save the playbook file.
+
+Run the playbook using the ansible-playbook command:
+
+
+ansible-playbook -i inventory.ini timezone.yml
+
+In this example, inventory.ini is the inventory file containing the target hosts. You should replace it with the name of your inventory file.
+
+The playbook will connect to each target host and set the timezone to Pacific/Bougainville using the timedatectl module. Once the playbook completes, the timezone on each host should be updated to match Pacific/Bougainville.

@@ -40,13 +40,15 @@ Resolution:
 
    scp /tmp/ROOT.war tony@172.16.238.10:/tmp
 
+ ssh into appserver again
+ 
 6- Deploy in Tomcat /webapps directory
 
    cp /tmp/ROOT.war /usr/share/tomcat/webapps/
 
 7- Start Tomcat 
 
-   systemctl start tomcat
+   sudo systemctl start tomcat
 
    systemctl status tomcat
 

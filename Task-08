@@ -1,1 +1,44 @@
 Task-8
+-------
+Regret for the time wasted can become a power of good in the time that remains.
+
+– Arthur Brisbane
+=======================================================================================================
+
+
+Tasks:
+------
+
+The xFusionCorp Industries security team recently did a security audit of their infrastructure and came up with ideas to improve the application and server security. They decided to use SElinux for an additional security layer. They are still planning how they will implement it; however, they have decided to start testing with app servers, so based on the recommendations they have the following requirements:
+
+Install the required packages of SElinux on App server 2 in Stratos Datacenter and disable it permanently for now; it will be enabled after making some required configuration changes on this host. Don't worry about rebooting the server as there is already a reboot scheduled for tonight's maintenance window. Also ignore the status of SElinux command line right now; the final status after reboot should be disabled.
+
+
+Resolution:
+-----------
+
+Connect to App server 2 using SSH or any other remote access tool.
+
+Switch to the root user by running the following command:
+
+
+sudo su
+
+Install the required SELinux packages by running the following command:
+
+
+yum install policycoreutils policycoreutils-python selinux-policy selinux-policy-targeted libselinux-utils setools setools-console mcstrans
+
+Once the installation is complete, disable SELinux by editing the /etc/selinux/config file using a text editor such as vi:
+
+
+vi /etc/selinux/config
+
+Change the SELINUX=enforcing line to SELINUX=disabled.
+
+Save and close the file by typing :wq.
+
+Reboot the server to make sure the changes take effect:
+
+
+SELinux should now be disabled permanently on App server 2. Once you have made the required configuration changes, you can enable SELinux by changing the SELINUX=disabled line back to SELINUX=enforcing in the /etc/selinux/config file and rebooting the server again.

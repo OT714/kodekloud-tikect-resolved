@@ -1,39 +1,38 @@
-Task-10 Linux Remote Copy
-==========================
-Do the best you can. No one can do more than that.
+Task-10
+=======
+The greatest glory in living, lies not in never falling, but in rising every time we fall.
 
-– John Wooden
+– Nelson Mandela
 
-Task:
+
+=======================================================================================================
+Task
 -----
-One of the Nautilus developers has copied confidential data on the jump host in Stratos DC. That data must be copied to one of the app servers. Because developers do not have access to app servers, they asked the system admins team to accomplish the task for them.
+After doing some security audits of servers, xFusionCorp Industries security team has implemented some new security policies. One of them is to disable direct root login through SSH.
 
-Copy /tmp/nautilus.txt.gpg file from jump server to App Server 3 at location /home/code.
+Disable direct SSH root login on all app servers in Stratos Datacenter.
 
-Solution
+
+Solution :
 ---------
-on jumpbox:
-# Generate a key to establish connection with the app server 
 
-   ssh-keygen 
+To disable direct SSH root login on all app servers in Stratos Datacenter, you can follow these steps:
 
-# Copy the key to the app serv and check the connection
+Connect to each app server using SSH with an account that has administrative privileges.
 
-  sudo ssh-copy-id -i ~/.ssh/id_rsa.pub banner@172.16.238.12
-  ssh  banner@172.16.238.12
+Edit the sshd configuration file /etc/ssh/sshd_config using a text editor such as nano or vi.
 
-# Copy the file from jumpbox to Appserv  
+Find the line that contains PermitRootLogin yes and change it to PermitRootLogin no.
 
-   scp  /tmp/nautilus.txt.gpg banner@172.16.238.12:/home/code
+Save the changes to the file and exit the text editor.
 
-=====================================================================================
+Restart the sshd service to apply the changes by running the following command:
 
-Assuming you have access to both the jump server and App Server 3, you can use the scp command to copy the nautilus.txt.gpg file from the jump server to App Server 3.
 
-Here's the command you can use:
+sudo systemctl restart sshd
 
-scp /tmp/nautilus.txt.gpg user@AppServer3:/home/code/
+Test the configuration by attempting to SSH into the app server as root. The SSH session should be rejected.
 
-Replace user with the username you use to log in to App Server 3. You will be prompted for the password for the user account on App Server 3.
+Repeat the above steps for all app servers in Stratos Datacenter.
 
-This command will copy the nautilus.txt.gpg file from the /tmp/ directory on the jump server to the /home/code/ directory on App Server 3. If the /home/code/ directory does not exist, it will be created automatically.
+Note: It is recommended to create a separate administrative account with sudo privileges to perform administrative tasks on the app servers. This way, the root account can be used for emergency access only.

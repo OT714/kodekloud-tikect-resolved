@@ -1,41 +1,69 @@
-Task-6: DNS Troubleshooting
-============================
+Task-6
+======
+The more that you read, the more things you will know. The more that you learn, the more places you'll go.
 
-The system admins team of xFusionCorp Industries 
-has noticed intermittent issues with DNS resolution 
-in several apps . App Server 3 in Stratos 
-Datacenter is having some DNS resolution issues 
-so we want to add some additional DNS 
-nameservers on this server. 
-As a temporary fix we have decided to go with Google 
-public DNS (ipv4). Please make appropriate changes on this server.
+– Dr. Seuss
+
+=========================================================================================================
+
+The backup server in the Stratos DC contains several template XML files used by the Nautilus application. However, these template XML files must be populated with valid data before they can be used. One of the daily tasks of a system admin working in the xFusionCorp industries is to apply string and file manipulation commands!
+
+Replace all occurances of the string String to Torpedo on the XML file /root/nautilus.xml located in the backup server.
+
+Solution:
+---------
+Navigate to the directory that contains the file you want to modify using the cd command. For example, if the file is in the home directory, you can navigate there using the command cd ~.
+
+Run the following command to replace all occurrences of "String" with "Torpedo" in the file:
+
+
+  sed -i 's/String/Torpedo/g' filename.txt
+
+Replace filename.txt with the name of the file you want to modify. This command uses the sed command with the -i option to modify the file in place. The s command tells sed to perform a substitution, and the g option tells it to replace all occurrences of the string in the file.
+
+After running the command, the file will be modified with all occurrences of "String" replaced with "Torpedo". You can verify this by opening the file in a text editor.
+
+It's important to note that the sed command can be a powerful tool, so it's recommended to make a backup of the original file before making any changes. Additionally, if the file is large, the sed command may take some time to complete, so be patient.
+
+==================================================================================================================
+Task 
+==================================================================================================================
+
+
+There is some data on Nautilus App Server 3 in Stratos DC. Data needs to be altered in several of the files. On Nautilus App Server 3, alter the /home/BSD.txt file as per details given below: 
+ 
+ 
+ 
+a. Delete all lines containing word copyright and save results in /home/BSD_DELETE.txt file. (Please be aware of case sensitivity) 
+ 
+b. Replace all occurrence of word the to is and save results in /home/BSD_REPLACE.txt file. 
+ 
+Note: Let's say you are asked to replace word to with from. In that case, make sure not to alter any words containing this string; for example upto, contributor 
+
 
 Resolution:
-------------
+-----------
+To delete all lines containing the word "copyright" from a file and save the results in /home/BSD_DELETE.txt, you can use the grep and sed commands in a pipeline.
 
-To add additional DNS nameservers on a server, you can edit the /etc/resolv.conf file. This file contains the DNS resolver configuration for the system.
+Here are the steps to delete all lines containing "copyright" and save the results to a file:
 
-Here are the steps to add Google public DNS (IPv4) to the /etc/resolv.conf file:
+Open a terminal window.
 
-Open the /etc/resolv.conf file in a text editor with root privileges. For example, you can use the following command to open the file in the Nano editor:
+Navigate to the directory that contains the file you want to modify using the cd command. For example, if the file is in the home directory, you can navigate there using the command cd ~.
 
-- sudo nano /etc/resolv.conf
-
-Add the following lines to the file:
-
-nameserver 8.8.8.8
-nameserver 8.8.4.4
-
-These lines specify the Google public DNS nameservers (IPv4).
-
-Save the changes to the file and exit the editor.
-Note that the /etc/resolv.conf file may be overwritten by the system if you are using a DHCP client to obtain network settings. To make the changes permanent, you may need to edit the network configuration files for your system. This can vary depending on your Linux distribution and network setup.
-
-On most modern Linux systems, you can add the DNS nameservers to the network configuration file for your network interface. For example, on a system using the systemd network manager, you can edit the /etc/systemd/network/50-dhcp-client.conf file to add the DNS nameservers:
+Run the following command to delete all lines containing "copyright":
 
 
-[DHCP]
-UseDNS=false
-DNS=8.8.8.8 8.8.4.4
 
-This will configure the DHCP client to use the specified DNS nameservers instead of the ones provided by the DHCP server. Note that you may need to restart the network service or reboot the system for the changes to take effect.
+grep -v 'copyright' filename.txt | tee /home/BSD_DELETE.txt | sed -e '/^$/d'
+
+Replace filename.txt with the name of the file you want to modify. This command uses the grep command with the -v option to filter out all lines containing the word "copyright".
+
+The tee command is used to output the results to both the terminal window and the /home/BSD_DELETE.txt file.
+
+Finally, the sed command is used to delete any blank lines in the output.
+
+After running the command, all lines containing "copyright" will be deleted from the file.
+
+It's important to note that the tee command can be a powerful tool, so it's recommended to make a backup of the original file before making any changes. Additionally, if the file is large, the grep command may take some time to complete, so be patient.
+

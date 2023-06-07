@@ -1,1 +1,56 @@
 Task-7
+=======
+
+There is no elevator to success, you have to take the stairs.
+
+– Zig Ziglar
+
+
+
+The system admins team of xFusionCorp Industries has set up some scripts on jump host that run on regular intervals and perform operations on all app servers in Stratos Datacenter. To make these scripts work properly we need to make sure the thor user on jump host has password-less SSH access to all app servers through their respective sudo users (i.e tony for app server 1). Based on the requirements, perform the following:
+
+Set up a password-less authentication from user thor on jump host to all app servers through their respective sudo users.
+
+
+Resolution:
+===========
+
+To set up password-less authentication from user thor on a jump host to all app servers (tony, mark, and paul) through their respective sudo users, you can use SSH key-based authentication.
+
+Here are the steps to set up password-less authentication:
+
+Generate an SSH key pair on the jump host by running the command ssh-keygen as the thor user. This will create a public and private key pair in the ~/.ssh directory.
+
+Copy the contents of the ~/.ssh/id_rsa.pub file on the jump host to the authorized_keys file on each of the app servers (tony, mark, and paul). You can do this using the following command:
+
+
+sudo ssh-copy-id -i  ~/.ssh/id_rsa.pub tony@172.16.238.10
+sudo ssh-copy-id -i  ~/.ssh/id_rsa.pub steve@172.16.238.11
+sudo ssh-copy-id -i  ~/.ssh/id_rsa.pub banner@172.16.238.12
+
+
+
+This will add the public key of the thor user to the authorized_keys file on each app server's sudo user.
+
+Ensure that the permissions on the .ssh directory and authorized_keys file are set correctly. They should be owned by the sudo user and have the following permissions:
+
+
+
+chmod 700 ~/.ssh
+chmod 600 ~/.ssh/authorized_keys
+Test the password-less authentication by attempting to log in to each of the app servers using the ssh command. For example:
+
+mjolnir123 	
+
+ssh sudo@tony
+ssh sudo@steve
+ssh sudo@banner
+You should be able to log in without being prompted for a password.
+
+It's important to note that setting up password-less authentication using SSH key-based authentication is convenient, but it can also pose a security risk if not done correctly. Be sure to follow best practices for SSH key management, such as setting strong passphrases for your private keys, regularly rotating your keys, and limiting the scope of access granted to each key.
+
+
+ss
+
+
+  

@@ -1,0 +1,28 @@
+Task-1 
+=========
+create a user in an non interactive mode :
+
+- To create a user with a non-interactive shell, you can use the useradd command with the -s flag to specify the shell. Here's an example command:
+
+useradd -s /bin/false myuser
+In this example, the user myuser is created with the shell /bin/false, which is a non-interactive shell that immediately exits when a user logs in. You can replace /bin/false with another non-interactive shell, such as /bin/nologin or /usr/sbin/nologin.
+
+- If you want to create a user without a home directory, you can use the --no-create-home option:
+
+useradd -s /bin/false --no-create-home myuser
+This will create the user myuser without a home directory and with the non-interactive shell /bin/false.
+
+
+
+Chatgpt good questions sample:
+================================
+- what are the best beginner-level devops projects i can build, that will take less than 2 hours?
+
+- what about project focussed on ansible?
+
+- after building  the project, how should i add it on my resume?
+
+- give me a sentence to put on my resume after completing a project of creating a playbook that installs necessary packages, configures users, and sets up the necessary services.
+
+- provide me with detailed step-by-step instructions on how to build this ansible project for creating a playbook that installs necessary packages, configures users, and sets up the necessary services.
+
